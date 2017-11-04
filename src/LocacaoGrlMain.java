@@ -195,7 +195,26 @@ public class LocacaoGrlMain {
     private static void removerLocacoes() {
     }
 
-    private static void removerCliente() {
+    private static void removerCliente() throws IOException {
+
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String opcaoEscolhida = null;
+        Cliente cliente = null;
+
+        System.out.println("\n --------- Remoção de cliente --------- \n");
+
+        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
+
+            System.out.println("Por favor informe o cpf do cliente");
+            opcaoEscolhida = in.readLine();
+            cliente = clienteController.buscar(opcaoEscolhida);
+            if (cliente == null) {
+                System.out.println("Não existe cliente com o cpf informado");
+                opcaoEscolhida = null;
+            }
+        }
+
+        clienteController.deletar(cliente);
     }
 
     /**

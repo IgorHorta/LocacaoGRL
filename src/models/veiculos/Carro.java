@@ -1,16 +1,17 @@
 package models.veiculos;
 
+import java.io.Serializable;
+
 /**
  * Classe que Representa um Veiculo do tipo carro
  * extends Veiculo
  */
-public class Carro extends Veiculo {
+public class Carro extends Veiculo implements Serializable {
 
     private Integer numeroDePortas = 4;
     private Integer numeroMaxPassageiros = 5;
-    private Boolean arCondicionado;
-    private Boolean vidroEletricoDianteiro;
-    private Boolean vidroEletricoTraseiro;
+    private boolean arCondicionado = false;
+    private boolean vidroEletricos = false;
 
     public Integer getNumeroMaxPassageiros() {
         return numeroMaxPassageiros;
@@ -36,19 +37,29 @@ public class Carro extends Veiculo {
         this.numeroDePortas = numeroDePortas;
     }
 
-    public Boolean getVidroEletricoDianteiro() {
-        return vidroEletricoDianteiro;
+    public boolean isVidroEletricos() {
+        return vidroEletricos;
     }
 
-    public void setVidroEletricoDianteiro(Boolean vidroEletricoDianteiro) {
-        this.vidroEletricoDianteiro = vidroEletricoDianteiro;
+    public void setVidroEletricos(boolean vidroEletricos) {
+        this.vidroEletricos = vidroEletricos;
     }
 
-    public Boolean getVidroEletricoTraseiro() {
-        return vidroEletricoTraseiro;
-    }
+    @Override
+    public String toString(){
 
-    public void setVidroEletricoTraseiro(Boolean vidroEletricoTraseiro) {
-        this.vidroEletricoTraseiro = vidroEletricoTraseiro;
+        return " -------- " +
+                "\nnome: "+(this.getNome() == null ? "" : this.getNome()) +
+                "\nplaca: "+(this.getPlaca() == null ? "" : this.getPlaca()) +
+                "\nmarca: "+(this.getMarca() == null ? "" : this.getMarca()) +
+                "\nano de fabricação: "+(this.getAnoFabricacao() == null ? "" : this.getAnoFabricacao().toString()) +
+                "\ncategoria: "+(this.getCategoria() == null ? "" : this.getCategoria().ordinal()) +
+                "\nkmPorLitro: "+(this.getKmPorLitro() == null ? "" : this.getKmPorLitro().toString()) +
+                "\ncilindradas: "+(this.getCilindradas() == null ? "": this.getCilindradas().toString()) +
+                "\npreco ao Dia: "+(this.getPrecoAoDia() == null ? "": this.getPrecoAoDia().toString()) +
+                "\nnumero de portas: "+(this.getNumeroDePortas() == null ? "": this.getNumeroDePortas().toString()) +
+                "\nnumero max de passageiros: "+(this.getNumeroDePortas() == null ? "": this.getNumeroDePortas().toString()) +
+                "\npossui ar condicionado: "+(this.getArCondicionado() == true ? "sim":"não");
+
     }
 }

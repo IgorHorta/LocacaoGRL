@@ -2,21 +2,21 @@ package models.veiculos;
 
 import enums.Categoria;
 
+import java.io.Serializable;
+
 /**
  * Classe Pai responsavél por armazenar informações básicas dos veículos
  */
-public class Veiculo {
+public class Veiculo implements Serializable{
 
-    private Integer id;
+    private String placa;
     private String nome;
     private String marca;
-    private String anoFabricacao;
-    private String modelo;
+    private Integer anoFabricacao;
     private Categoria categoria;
-    private Float kmPorLitro;
-    private Integer cavalos;
+    private Integer kmPorLitro;
     private Integer cilindradas;
-    private Integer precoAoDia;
+    private Float precoAoDia;
 
     public String getNome() {
         return nome;
@@ -34,36 +34,20 @@ public class Veiculo {
         this.marca = marca;
     }
 
-    public String getAnoFabricacao() {
+    public Integer getAnoFabricacao() {
         return anoFabricacao;
     }
 
-    public void setAnoFabricacao(String anoFabricacao) {
+    public void setAnoFabricacao(Integer anoFabricacao) {
         this.anoFabricacao = anoFabricacao;
     }
 
-    public String getModelo() {
-        return modelo;
-    }
-
-    public void setModelo(String modelo) {
-        this.modelo = modelo;
-    }
-
-    public Float getKmPorLitro() {
+    public Integer getKmPorLitro() {
         return kmPorLitro;
     }
 
-    public void setKmPorLitro(Float kmPorLitro) {
+    public void setKmPorLitro(Integer kmPorLitro) {
         this.kmPorLitro = kmPorLitro;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Categoria getCategoria() {
@@ -74,14 +58,6 @@ public class Veiculo {
         this.categoria = categoria;
     }
 
-    public Integer getCavalos() {
-        return cavalos;
-    }
-
-    public void setCavalos(Integer cavalos) {
-        this.cavalos = cavalos;
-    }
-
     public Integer getCilindradas() {
         return cilindradas;
     }
@@ -90,11 +66,20 @@ public class Veiculo {
         this.cilindradas = cilindradas;
     }
 
-    public Integer getPrecoAoDia() {
+    public Float getPrecoAoDia() {
         return precoAoDia;
     }
 
-    public void setPrecoAoDia(Integer precoAoDia) {
+    public void setPrecoAoDia(Float precoAoDia) {
         this.precoAoDia = precoAoDia;
     }
+
+    public String getPlaca() {
+        return placa;
+    }
+
+    public void setPlaca(String placa) {
+        this.placa = placa;
+    }
+
 }

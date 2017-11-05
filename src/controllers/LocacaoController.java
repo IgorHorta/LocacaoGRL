@@ -47,4 +47,21 @@ public class LocacaoController implements BaseController<Locacao> {
     public List<Locacao> listar() {
         return lojaDao.getLocacoes();
     }
+
+    /**
+     *
+     * Calcula a receita total ao dia de todas as Locações
+     * da lista.
+     * @return Float total da receita ao dia;
+     */
+    public Float calcularReceitaTotalDeLocacoes() {
+
+        Float total = 0F;
+
+        for (Locacao locacao : lojaDao.getLocacoes()) {
+            total += locacao.getVeiculo().getPrecoAoDia();
+        }
+
+        return total;
+    }
 }

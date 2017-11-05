@@ -69,9 +69,9 @@ public class LocacaoGrlMain {
         System.out.println("11 -------------- Remover Clientes");
         System.out.println("12 -------------- Remover Locações");
 
-        System.out.println("\n13 -------------- buscar Veiculos por placa");
-        System.out.println("14 -------------- buscar Clientes por CPF");
-        System.out.println("15 -------------- buscar Locações por CPF ou Placa");
+        System.out.println("\n13 -------------- Buscar Veiculos por placa");
+        System.out.println("14 -------------- Buscar Clientes por CPF");
+        System.out.println("15 -------------- Buscar Locações por CPF ou Placa");
 
         System.out.println("\n16 -------------- Calcular receita total das locações");
 
@@ -179,29 +179,115 @@ public class LocacaoGrlMain {
         }
     }
 
+    /**
+     * Calcula o valor total das locações ao
+     * dia
+     */
     private static void calcularReceitaTotalLocacoes() {
+        System.out.println("O total da receita ao dia das locações e: R$"+locacaoController.calcularReceitaTotalDeLocacoes());
     }
 
-    private static void buscarLocacoes() {
+    /**
+     * Busca uma locação a partir do cpf
+     * de um cliente e a placa de um veículo
+     * @throws IOException
+     */
+    private static void buscarLocacoes() throws IOException {
+        Veiculo veiculo = obterVeiculoPorPlaca();
+        Cliente cliente = obterClientePorCpf();
+
+        if(cliente == null || veiculo == null){
+            return;
+        }
+        Locacao locacao = locacaoController.buscar(cliente.getCpf(),veiculo.getPlaca());
+        if(locacao != null) {
+            System.out.println(locacao.toString());
+        }else{
+            System.out.println("Nenhuma locação encontrada com os dados informados ...");
+        }
+
     }
 
-    private static void buscarCliente() {
+    /**
+     * Busca um determinado cliente
+     * a partir de seu cpf
+     * @throws IOException
+     */
+    private static void buscarCliente() throws IOException {
+        System.out.println("\n --------- Buscar cliente --------- \n");
+        Cliente cliente = obterClientePorCpf();
+        if(cliente != null) {
+            System.out.println(cliente.toString());
+        }
     }
 
 
-    private static void buscarVeiculos() {
+    /**
+     * Busca um veículo a partir da placa
+     * informada pelo usuário
+     *
+     * @throws IOException
+     */
+    private static void buscarVeiculos() throws IOException {
+        System.out.println("\n --------- Buscar veículo --------- \n");
+        Veiculo veiculo = obterVeiculoPorPlaca();
+        if(veiculo != null) {
+
+            System.out.println(veiculo.toString());
+        }
     }
 
-    private static void removerLocacoes() {
+    /**
+     * Remove uma locação a partir do cpf
+     * de um cliente e uma placa de um veículo
+     * @throws IOException
+     */
+    private static void removerLocacoes() throws IOException {
+
+        System.out.println("\n --------- Remoção de locação --------- \n");
+
+        Veiculo veiculo = obterVeiculoPorPlaca();
+        Cliente cliente = obterClientePorCpf();
+
+        if(veiculo == null || cliente == null) {
+            return;
+        }
+
+        Locacao locacao = locacaoController.buscar(cliente.getCpf(), veiculo.getPlaca());
+
+        locacaoController.deletar(locacao);
     }
 
+    /**
+     * Remove um cliente a partir do cpf
+     * informado por um usuário
+     * @throws IOException
+     */
     private static void removerCliente() throws IOException {
+
+        System.out.println("\n --------- Remoção de cliente --------- \n");
+
+        Cliente cliente = obterClientePorCpf();
+
+        if(cliente != null){
+
+            clienteController.deletar(cliente);
+        }
+    }
+
+
+    /**
+     * Retorna um cliente a partir de um cpf
+     * informado pelo usuario
+     *
+     * @return Cliente
+     * @throws IOException
+     */
+    private static Cliente obterClientePorCpf() throws IOException {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String opcaoEscolhida = null;
         Cliente cliente = null;
-
-        System.out.println("\n --------- Remoção de cliente --------- \n");
 
         while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
@@ -210,11 +296,10 @@ public class LocacaoGrlMain {
             cliente = clienteController.buscar(opcaoEscolhida);
             if (cliente == null) {
                 System.out.println("Não existe cliente com o cpf informado");
-                opcaoEscolhida = null;
+                return null;
             }
         }
-
-        clienteController.deletar(cliente);
+        return cliente;
     }
 
     /**
@@ -224,11 +309,23 @@ public class LocacaoGrlMain {
      * @throws IOException
      */
     private static void removerVeiculos() throws IOException {
+        System.out.println("\n --------- Remoção de veículo --------- \n");
+        Veiculo veiculo = obterVeiculoPorPlaca();
+        if(veiculo != null) {
+            veiculoController.deletar(veiculo);
+        }
+    }
+
+    /**
+     * Rertona um veiculo cuja a placa
+     * foi informada pelo usuário
+     * @return Veiculo
+     * @throws IOException
+     */
+    private static Veiculo obterVeiculoPorPlaca() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String opcaoEscolhida = null;
         Veiculo veiculo = null;
-
-        System.out.println("\n --------- Remoção de veículo --------- \n");
 
         while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
@@ -237,11 +334,10 @@ public class LocacaoGrlMain {
             veiculo = veiculoController.buscar(opcaoEscolhida);
             if(veiculo == null) {
                 System.out.println("Não existe veiculo com a placa informada");
-                opcaoEscolhida = null;
+                return null;
             }
         }
-
-        veiculoController.deletar(veiculo);
+        return veiculo;
     }
 
     /**
@@ -256,27 +352,15 @@ public class LocacaoGrlMain {
 
         System.out.println("\n --------- Edição de locação --------- \n");
 
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
+        Veiculo veiculo = obterVeiculoPorPlaca();
+        Cliente cliente = obterClientePorCpf();
 
-            System.out.println("Por favor informe a placa do veículo para edição da Locação");
-            opcaoEscolhida = in.readLine();
-            locacao.setVeiculo(veiculoController.buscar(opcaoEscolhida));
-            if(locacao.getVeiculo() == null) {
-                System.out.println("Não existe veiculo com a placa informada");
-                opcaoEscolhida = null;
-            }
+        if(veiculo == null || cliente == null) {
+            return;
         }
-        opcaoEscolhida = null;
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
-            System.out.println("Por favor informe o cpf do cliente para edição da Locação");
-            opcaoEscolhida = in.readLine();
-            locacao.setCliente(clienteController.buscar(opcaoEscolhida));
-            if(locacao.getCliente() == null) {
-                System.out.println("Não existe cliente com o cpf informado");
-                opcaoEscolhida = null;
-            }
-        }
+        locacao.setVeiculo(veiculo);
+        locacao.setCliente(cliente);
 
         Locacao locacaoEncontrada = locacaoController.buscar(locacao.getCliente().getCpf(), locacao.getVeiculo().getPlaca());
 
@@ -304,20 +388,15 @@ public class LocacaoGrlMain {
     private static void editarVeiculos() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String opcaoEscolhida = null;
-        Veiculo veiculo = null;
 
         System.out.println("\n --------- Edição de veículo --------- \n");
 
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
+        Veiculo veiculo = obterVeiculoPorPlaca();
 
-            System.out.println("Por favor informe a placa do veículo para edição");
-            opcaoEscolhida = in.readLine();
-            veiculo = veiculoController.buscar(opcaoEscolhida);
-            if(veiculo == null) {
-                System.out.println("Não existe veiculo com a placa informada");
-                opcaoEscolhida = null;
-            }
+        if(veiculo == null) {
+            return;
         }
+
         opcaoEscolhida = null;
         while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
@@ -338,18 +417,13 @@ public class LocacaoGrlMain {
 
         BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
         String opcaoEscolhida = null;
-        Cliente cliente = null;
 
         System.out.println("\n --------- Edição de cliente --------- \n");
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
-            System.out.println("Por favor informe o cpf do cliente que deseja editar");
-            opcaoEscolhida = in.readLine();
-            cliente = clienteController.buscar(opcaoEscolhida);
-            if(cliente == null) {
-                System.out.println("Não existe cliente com o cpf informado");
-                opcaoEscolhida = null;
-            }
+        Cliente cliente = obterClientePorCpf();
+
+        if(cliente == null) {
+            return;
         }
         opcaoEscolhida = null;
         while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
@@ -371,33 +445,16 @@ public class LocacaoGrlMain {
         String opcaoEscolhida = null;
 
         System.out.println("\n --------- Cadastro de Locação --------- \n");
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
-            System.out.println("Por favor informe o cpf do cliente da locação");
-            opcaoEscolhida = in.readLine();
-            Cliente cliente = clienteController.buscar(opcaoEscolhida);
-            if(cliente == null) {
-                System.out.println("Não existe clientes com o cpf informado");
-                opcaoEscolhida = null;
-            }
-            locacao.setCliente(cliente);
+        Cliente cliente = obterClientePorCpf();
+        Veiculo veiculo = obterVeiculoPorPlaca();
+
+        if(cliente == null || veiculo == null ) {
+            return;
         }
 
-        opcaoEscolhida = null;
-
-        while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
-
-            System.out.println("Por favor informe a placa do veículo para locação");
-            opcaoEscolhida = in.readLine();
-            Veiculo veiculo = veiculoController.buscar(opcaoEscolhida);
-            if(veiculo == null) {
-                System.out.println("Não existe veiculo com a placa informada");
-                opcaoEscolhida = null;
-            }
-            locacao.setVeiculo(veiculo);
-        }
-
-        opcaoEscolhida = null;
+        locacao.setVeiculo(veiculo);
+        locacao.setCliente(cliente);
 
         while (opcaoEscolhida == null || opcaoEscolhida.isEmpty()) {
 
@@ -456,7 +513,6 @@ public class LocacaoGrlMain {
         }
 
         clienteController.salvar(cliente);
-
     }
 
 
@@ -651,7 +707,7 @@ public class LocacaoGrlMain {
         opcaoEscolhida = in.readLine();
         moto.setPartidaEletrica(opcaoEscolhida != null && opcaoEscolhida.toUpperCase().equals("S"));
 
-        System.out.println("A moto possui partida eletrica ? S -- Sim N -- Não");
+        System.out.println("A moto possui trava para capacete ? S -- Sim N -- Não");
         opcaoEscolhida = in.readLine();
         moto.setTravaParaCapacete(opcaoEscolhida != null && opcaoEscolhida.toUpperCase().equals("S"));
 
